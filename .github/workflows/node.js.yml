@@ -17,6 +17,8 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+  ${{ github.event.repository.name }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
