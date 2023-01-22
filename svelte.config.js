@@ -1,7 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
-let urlBase =  'process.env.npm_package_name';
+let urlBase =  '';
 
 // Check we are deploying to GitHub Pages
 if(process.env.GITHUB_PAGES == "true") {
