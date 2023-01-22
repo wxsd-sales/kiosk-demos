@@ -1,15 +1,18 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
-const dev = process.env.npm_lifecycle_event === "dev";
+let urlBase =  'process.env.npm_package_name';
 
-console.log('ENV: ' + JSON.stringify(process.env))
-
-let base =  process.env.npm_package_name;
-
-if(process.env.REPO_NAME) {
-	console.log('Repo Name Present: ' + process.env.REPO_NAME)
-	base = process.env.REPO_NAME
+// Check we are deploying to GitHub Pages
+if(process.env.GITHUB_PAGES == "true") {
+	// Use repo name as base if given, otherwise use package name
+	if(process.env.REPO_NAME) {
+		console.log('Using provide repo name as base: ' + process.env.REPO_NAME)
+		urlBase = `/${process.env.REPO_NAME}`;
+	} else {
+		console.log('Using package name as base: ' + process.env.npm_package_name)
+		urlBase = `/${process.env.npm_package_name}`; 
+	}
 }
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -21,7 +24,7 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		paths: {
-			base: dev ? "" : `/${base}`,
+			base: urlBase,
 		},
 	}
 };
