@@ -20,6 +20,7 @@
 	}
 
 	function sendOrder(){
+		console.log('Send Order Click')
 		const testOrder = {
 			name: 'William',
 			location: 'The Office',
@@ -62,8 +63,9 @@
 		class:is-responsive={responsive}>Clear Cart</button>
 		<button class="button is-info is-rounded {buttonSize}"
 		class:is-responsive={responsive}>Add More</button>
-		<button class="button is-success is-rounded on:click={sendOrder} {buttonSize}
-		class:is-responsive={responsive}">Submit Order</button>
+		<button class="button is-success is-rounded {buttonSize}"
+		 on:click={sendOrder} 
+		class:is-responsive={responsive}>Submit Order</button>
 		{:else}
 		<button class="button is-info is-rounded {buttonSize}">Add an coffee</button>
 		{/if}

@@ -92,7 +92,7 @@
           <LottiePlayerTest
                 src={coffieLottie}
                 autoplay={true}
-                loop={true}
+                loop={false}
                 speed={0.75}
                 renderer="svg"
                 background="transparent"
