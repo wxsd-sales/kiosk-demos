@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { page } from "$app/stores";
+    //get the url parameter
 </script>
 
 
@@ -12,7 +14,7 @@
     <div class="hero-body">
       <div class="container has-text-centered">
         <p class="title is-size-1">
-          Talk Time
+          Talk Time (text)
         </p>
       </div>
     </div>

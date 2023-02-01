@@ -21,6 +21,11 @@ const config = {
 	// for more information about preprocessors
 	preprocess: preprocess(),
 	kit: {
+		alias: {
+			$components: 'src/lib/components',
+			$assets: 'src/lib/assets',
+			$lib: 'src/lib'
+		},
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
