@@ -38,7 +38,7 @@
 	});
 </script>
 
-<CartModal bind:cartModalVisable/>
+<CartModal bind:cartModalVisable {buttonSize} {responsive}/>
 
 <div class="level-right is-align-content-flex-start">
 	<button class="button level-item is-rounded {buttonSize}"
