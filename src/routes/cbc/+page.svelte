@@ -1,17 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-
 	import WebexLogo from '$assets/webex-logo.svg';
 
-  let logo: string | null;
-	
+	let logo: string | null;
 	let location: string | null;
 	let message: string | null;
 
 	onMount(() => {
-    logo = $page.url.searchParams.get('location');
-    location = $page.url.searchParams.get('location');
+		logo = $page.url.searchParams.get('location');
+		location = $page.url.searchParams.get('location');
 		message = $page.url.searchParams.get('message');
 	});
 </script>
@@ -35,7 +33,8 @@
 			{#if message}
 				<p class="title is-size-1">{message}</p>
 			{/if}
+		</div>
+		<!-- Hero footer: will stick at the bottom -->
+		<div class="hero-foot" />
 	</div>
-	<!-- Hero footer: will stick at the bottom -->
-	<div class="hero-foot" />
 </section>
