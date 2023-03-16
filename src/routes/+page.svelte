@@ -2,6 +2,7 @@
     import { Demos} from '$assets/demos';
 </script>
 
+
 <section class="hero is-dark  is-fullheight">
 	<!-- Hero head: will stick at the top -->
 	<div class="hero-head has-text-centered">
@@ -23,8 +24,8 @@
                 <img src={demo.image} alt='Demo Screenshot'>
               </figure>
               <div class="buttons pt-2">
-                <button class="button is-primary">Source Code</button>
-                <button class="button is-link">Live Demo</button>
+				<a class="button is-primary" href="{demo.link}">Source Code</a>
+				<a class="button is-link" href="{demo.demo}">Live Demo</a>
               </div>
 						</article>
 					</div>
