@@ -1,4 +1,3 @@
-
 export type OrderItem = {
     coffee: string,
     milk: string
