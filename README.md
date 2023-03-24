@@ -1,4 +1,4 @@
-# create-svelte
+# Kiosk Demos
 
 Welcome to our WXSD DEMO Repo! <!-- Keep this here --> 
 
