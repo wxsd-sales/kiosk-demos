@@ -44,17 +44,16 @@
 	});
 
 	async function pollData(xapi: connection) {
-		roomAnalytics = await 
-    xapi
+		roomAnalytics = await xapi
 			.getAnalytics()
-			.then((result) => flatten(result) )
-			.then(result => {
+			.then((result) => flatten(result))
+			.then((result) => {
 				if ('AmbientTemperature' in result) {
 					let cTemp = parseInt(result.AmbientTemperature);
 					let fTemp = (cTemp * 9) / 5 + 32;
 					result.AmbientTemperature = `${fTemp}°F / ${cTemp}°C`;
 				}
-        if ('RelativeHumidity' in result) {
+				if ('RelativeHumidity' in result) {
 					result.RelativeHumidity = result.RelativeHumidity + '%';
 				}
 				return result;
@@ -71,11 +70,11 @@
 			{ title: 'Humidity', metric: 'RelativeHumidity', icon: 'fa-wind' }
 		],
 		[
-			{ title: 'People Presence', metric: 'PeoplePresence', icon: 'fa-temperature-three-quarters' },
+			{ title: 'People Presence', metric: 'PeoplePresence', icon: 'fa-user-check' },
 			{ title: 'People Count', metric: 'PeopleCount.Current', icon: 'fa-people-group' }
 		],
 		[
-			{ title: 'Space Capacity', metric: 'PeopleCount.Capacity', icon: 'fa-user-check' },
+			{ title: 'Space Capacity', metric: 'PeopleCount.Capacity', icon: 'fa-users-viewfinder' },
 			{ title: 'Close Proximity', metric: 'Engagement.CloseProximity', icon: 'fa-user-group' }
 		]
 	];
@@ -88,7 +87,7 @@
 <section class="hero is-dark is-fullheight">
 	<!-- Hero head: will stick at the top -->
 	<div class="hero-head has-text-centered">
-		<p class="title is-size-2">Device Analytics</p>
+		<p class="title is-size-2 pt-3">Device Analytics</p>
 	</div>
 	<!-- Hero content: will be in the middle -->
 	<div class="hero-body py-2">
@@ -121,6 +120,30 @@
 		<div class="hero-foot" />
 	</div>
 </section>
+
+icon-picker
+Blinds
+Briefing
+Concierge
+Disc
+Handset
+Help
+Helpdesk
+Home
+Hvac
+Info
+Input
+Language
+Laptop
+Lightbulb
+Media
+Microphone
+Power
+Proximity
+Record
+Sliders
+Tv
+
 
 <style>
 	.outline {
