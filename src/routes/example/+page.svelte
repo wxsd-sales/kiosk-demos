@@ -26,7 +26,7 @@
 	function exitKiosk() {
 		console.log('Existing Kiosk Mode');
 		location.hash = '';
-		location.hash = '#command=existKiosk';
+		location.hash = '#command=exitKiosk';
 	}
 </script>
 
