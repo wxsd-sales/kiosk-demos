@@ -121,30 +121,6 @@
 	</div>
 </section>
 
-icon-picker
-Blinds
-Briefing
-Concierge
-Disc
-Handset
-Help
-Helpdesk
-Home
-Hvac
-Info
-Input
-Language
-Laptop
-Lightbulb
-Media
-Microphone
-Power
-Proximity
-Record
-Sliders
-Tv
-
-
 <style>
 	.outline {
 		border: 1px solid white;
