@@ -4,7 +4,7 @@
 	import type { OrderItem } from '../../../types';
 	import toast, { Toaster } from 'svelte-french-toast';
 	import { fade, fly} from 'svelte/transition';
-	import { Coffees, Milks } from '../../assets/coffees/';
+	import { Coffees, Milks } from '../../assets/coffees';
 
 	let step = 1;
 	let item = <OrderItem>{};
