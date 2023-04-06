@@ -87,7 +87,7 @@
 			case 'accepted':
 				pinAccepted();
 				break;
-			case 'rejested':
+			case 'rejected':
 				pinRejected();
 				break;
 		}
