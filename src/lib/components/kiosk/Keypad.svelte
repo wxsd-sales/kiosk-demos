@@ -12,7 +12,7 @@
         dispatch('submit')
         loading = true;
         setTimeout(()=>{
-            dispatch('No response from deivce timeout');
+            dispatch('timeout');
             loading = false;
         },4000)
     };

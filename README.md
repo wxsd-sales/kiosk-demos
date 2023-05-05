@@ -1,44 +1,74 @@
-# Kiosk Demos
+# Webex Device Web App Demos
 
-Welcome to our WXSD DEMO Repo! <!-- Keep this here --> 
+This project contains a collection of Single-page application (SPA) demos designed to showcase solutions to many different use cases on Webex Devices.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+![Demo Home Page](static/images/home-screenshot.png)
+
+## Overview
+
+Cisco Webex Devices have a built in web browser which can be used to launch web apps to solve use cases and enhance experiences on the devices.
+
+* Web Apps: A single button on the OSD of a Desk or Board series which can open a fullscreen web app
+* Kiosk Mode: A persistently displayed fullscreen web app on the OSD of a Desk or Board series device which allows calling via a SIP protocol handler
+* Persistent Web App (PWA): Similar to kiosk mode but for the Webex Room Navigator. This is a mode which your Navigator can be paired to a Room system with where it can permentantly display a web app
+* WebViews: These are programmatically opened web apps which can be displays in Fullscreen or Modal form on either the OSD of a device or a Webex Room Navigator. If opened on a the OSD of a Room Series device, the WebView will be non-interactive.
 
 
-<!-- Keep the following here -->  
- *_Everything included is for demo and Proof of Concept purposes only. Your use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex usecases, but are not Official Cisco Webex Branded demos._
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Setup
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+### Prerequisites & Dependencies: 
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- Node >18.15.0 (recommended)
+- Webex Device with WebEngine support to view these demos
 
-## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Installation Steps:
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
 
 ## Building
 
-To create a production version of your app:
+Open a new terminal window and follow the instructions below to setup the project locally for development/demo.
 
-```bash
-npm run build
-```
+1. Clone this repository and change directory:
+    ```
+    git clone https://github.com/wxsd-sales/kiosk-demos && cd kiosk-demos
+    ```
 
-You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3. Build project:
+    ```bash
+    npm run build
+    ```
+
+4. You can preview the production build and view it in your browser with this command:
+    ```bash
+    npm run preview -- --open
+    ```
+
+
+## Demo
+
+Check out our live demo, available [here](https://wxsd-sales.github.io/kiosk-demos)!
+
+<!-- Keep the following statement -->
+*For more demos & PoCs like this, check out our [Webex Labs site](https://collabtoolbox.cisco.com/webex-labs).
+
+
+## License
+
+All contents are licensed under the MIT license. Please see [license](LICENSE) for details.
+
+## Disclaimer
+
+ Everything included is for demo and Proof of Concept purposes only. Use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex use cases, but are not Official Cisco Webex Branded demos.
+
+
+## Questions
+Please contact the WXSD team at [wxsd@external.cisco.com](mailto:wxsd@external.cisco.com?subject=kiosk-demos) for questions. Or, if you're a Cisco internal employee, reach out to us on the Webex App via our bot (globalexpert@webex.bot). In the "Engagement Type" field, choose the "API/SDK Proof of Concept Integration Development" option to make sure you reach our team. 

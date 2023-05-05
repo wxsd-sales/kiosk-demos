@@ -11,7 +11,7 @@
 
 	export let buttonSize: string = 'is-large';
 	export let responsive: boolean = true;
-	export let textSize: string = '';
+	//export let textSize: string = '';
 
 
 	$: coffeeIcon = () => {

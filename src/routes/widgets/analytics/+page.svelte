@@ -91,13 +91,13 @@
 	</div>
 	<!-- Hero content: will be in the middle -->
 	<div class="hero-body py-2">
-		<div class="container has-text-centered">
+		<div class="container">
 			{#each sensors as row}
 				<div class="columns is-mobile">
 					{#each row as sensor}
 						<div class="column">
 							<div class="card has-background-dark has-text-grey-light outline">
-								<header class="card-header">
+								<header class="card-header has-text-left">
 									<p class="card-header-title is-size-5 has-text-grey-light">{sensor.title}</p>
 									<span class="icon is-large is-size-5">
 										<i class="fas {sensor.icon}" />
