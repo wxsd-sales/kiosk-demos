@@ -46,7 +46,7 @@
 			.then((result) => {
 				console.log('Image sent');
 				sent = true;
-                setTimeout(updateHash, 1000, `snapshot-complete`)
+                setTimeout(updateHash, 2000, `snapshot-complete`)
 			})
 			.catch((error) => console.log('Image failed to send'));
 	}
