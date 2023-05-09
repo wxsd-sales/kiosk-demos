@@ -7,8 +7,8 @@
 	let token: string | null;
 	let email: string | null;
 	let text: string | null;
-    let error = false;
-    let sent = false;
+	let error = false;
+	let sent = false;
 
 	let canvas: HTMLCanvasElement;
 	let context: CanvasRenderingContext2D | null;
@@ -44,24 +44,24 @@
 			body: formdata
 		})
 			.then((result) => {
-                console.log('Image sent')
-                sent = true;
-                location.hash = '';
-		        location.hash = '#snapshot-complete'
-            })
+				console.log('Image sent');
+				sent = true;
+				location.hash = '';
+				location.hash = '#snapshot-complete';
+			})
 			.catch((error) => console.log('Image failed to send'));
 	}
 
 	onMount(() => {
 		token = $page.url.searchParams.get('token');
 		email = $page.url.searchParams.get('email');
-        text = $page.url.searchParams.get('text');
+		text = $page.url.searchParams.get('text');
 		context = canvas.getContext('2d');
 
-        if(token == null || email == null){
-            error = true;
-            return
-        }
+		if (token == null || email == null) {
+			error = true;
+			return;
+		}
 
 		const constraints = {
 			video: true
@@ -79,18 +79,22 @@
 	<div class="hero-head" />
 	<div class="hero-body">
 		<div class="container has-text-centered">
-            {#if error}
-            <p class="title">Missing URL Parameters</p>
-            <p class="subtitle">Please ensure a Bot Token and taget email is provided<br>Text parameter is optional</p>
-            <p class="subtitle">E.g. http://example.com/?token=123&email=user@example&text=Here is your webcam capture</p>
-            {:else}
-            <p class="title">Camera Capture</p>
-                {#if sent}
-                <p class="title">Image has been sent 😀</p>
-                {:else}
-                <p class="title">This web page will catpure your webcam</p> 
-                {/if}
-            {/if}
+			{#if error}
+				<p class="title">Missing URL Parameters</p>
+				<p class="subtitle">
+					Please ensure a Bot Token and taget email is provided<br />Text parameter is optional
+				</p>
+				<p class="subtitle">
+					E.g. http://example.com/?token=123&email=user@example&text=Here is your webcam capture
+				</p>
+			{:else}
+				<p class="title">Camera Capture</p>
+				{#if sent}
+					<p class="title">Image has been sent 😀</p>
+				{:else}
+					<p class="title">This web page will catpure your webcam</p>
+				{/if}
+			{/if}
 		</div>
 	</div>
 	<div class="hero-foot">
