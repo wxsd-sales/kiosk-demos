@@ -8,6 +8,7 @@
 	let email: string | null;
 	let text: string | null;
     let error = false;
+    let sent = false;
 
 	let canvas: HTMLCanvasElement;
 	let context: CanvasRenderingContext2D | null;
@@ -42,7 +43,10 @@
 			method: 'post',
 			body: formdata
 		})
-			.then((result) => console.log('Image sent'))
+			.then((result) => {
+                console.log('Image sent')
+                sent = true;
+            })
 			.catch((error) => console.log('Image failed to send'));
 	}
 
@@ -75,12 +79,15 @@
 		<div class="container has-text-centered">
             {#if error}
             <p class="title">Missing URL Parameters</p>
-            <p class="subtitle">Please ensure a Bot Token and taget email is provided</p>
-            <p class="subtitle">Text parameter is optional</p>
+            <p class="subtitle">Please ensure a Bot Token and taget email is provided<br>Text parameter is optional</p>
             <p class="subtitle">E.g. http://example.com/?token=123&email=user@example&text=Here is your webcam capture</p>
             {:else}
             <p class="title">Camera Capture</p>
-			<p class="subtitle">This web page will catpure your webcam</p> 
+                {#if sent}
+                <p class="title">Image has been sent 😀</p>
+                {:else}
+                <p class="title">This web page will catpure your webcam</p> 
+                {/if}
             {/if}
 		</div>
 	</div>
