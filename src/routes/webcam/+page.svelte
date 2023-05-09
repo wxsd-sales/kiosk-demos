@@ -46,7 +46,8 @@
 			.then((result) => {
                 console.log('Image sent')
                 sent = true;
-                setTimeout(close, 2000);
+                location.hash = '';
+		        location.hash = '#snapshot-complete'
             })
 			.catch((error) => console.log('Image failed to send'));
 	}
