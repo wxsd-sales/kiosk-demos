@@ -46,6 +46,7 @@
 			.then((result) => {
                 console.log('Image sent')
                 sent = true;
+                setTimeout(close, 2000);
             })
 			.catch((error) => console.log('Image failed to send'));
 	}
