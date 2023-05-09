@@ -46,11 +46,15 @@
 			.then((result) => {
 				console.log('Image sent');
 				sent = true;
-				location.hash = '';
-				location.hash = '#snapshot-complete';
+                setTimeout(updateHash, 1000, `snapshot-complete`)
 			})
 			.catch((error) => console.log('Image failed to send'));
 	}
+
+    function updateHash(text: String){
+        location.hash = '';
+		location.hash = `#${text}`;
+    }
 
 	onMount(() => {
 		token = $page.url.searchParams.get('token');
@@ -70,7 +74,7 @@
 		// Attach the video stream to the video element and autoplay.
 		navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
 			player.srcObject = stream;
-			setTimeout(getImage, 2000);
+			setTimeout(getImage, 3000);
 		});
 	});
 </script>
@@ -82,7 +86,7 @@
 			{#if error}
 				<p class="title">Missing URL Parameters</p>
 				<p class="subtitle">
-					Please ensure a Bot Token and taget email is provided<br />Text parameter is optional
+					Please ensure a Bot Token and taget email is provided<br/>Text parameter is optional
 				</p>
 				<p class="subtitle">
 					E.g. http://example.com/?token=123&email=user@example&text=Here is your webcam capture
