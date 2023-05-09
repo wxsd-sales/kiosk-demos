@@ -49,6 +49,7 @@
 	onMount(() => {
 		token = $page.url.searchParams.get('token');
 		email = $page.url.searchParams.get('email');
+        text = $page.url.searchParams.get('text');
 		context = canvas.getContext('2d');
 
         if(token == null || email == null){
