@@ -18,7 +18,7 @@
 	function getImage() {
 		if (context == null) return;
 		context.drawImage(player, 0, 0, canvas.width, canvas.height);
-		canvas.toBlob(sendImage);
+		canvas.toBlob(sendImage, 'image/jpeg');
 	}
 
 	function sendImage(imgData: Blob | null) {
@@ -32,7 +32,7 @@
 		let formdata = new FormData();
 		formdata.append('toPersonEmail', email);
 		formdata.append('text', text);
-		formdata.append('files', imgData, 'webcam.png');
+		formdata.append('files', imgData, 'webcam.jpg');
 
 		console.log(`Email: ${email} - Text: ${text} `);
 		const header = new Headers({
