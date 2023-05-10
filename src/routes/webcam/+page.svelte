@@ -7,6 +7,7 @@
 	let token: string | null;
 	let email: string | null;
 	let text: string | null;
+    let showPlayer = false;
 	let error = false;
 	let sent = false;
 
@@ -60,6 +61,8 @@
 		token = $page.url.searchParams.get('token');
 		email = $page.url.searchParams.get('email');
 		text = $page.url.searchParams.get('text');
+        showPlayer = $page.url.searchParams.get('showPlayer') == 'true';
+        console.log('Showplayer = ' +showPlayer)
 		context = canvas.getContext('2d');
 
 		if (token == null || email == null) {
@@ -99,11 +102,12 @@
 					<p class="title">This web page will catpure your webcam</p>
 				{/if}
 			{/if}
+            <!-- svelte-ignore a11y-media-has-caption -->
+            <video class="{showPlayer ?  '' :  'is-hidden'}" bind:this={player} autoplay />
 		</div>
 	</div>
 	<div class="hero-foot">
 		<!-- svelte-ignore a11y-media-has-caption -->
-		<video hidden bind:this={player} controls autoplay />
 		<button hidden id="capture">Capture</button>
 		<canvas hidden bind:this={canvas} width="1920" height="1080" />
 	</div>
