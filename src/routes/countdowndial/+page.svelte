@@ -18,6 +18,7 @@
 	onMount(() => {
 		const timerParameter = $page.url.searchParams.get('timer');
 		if (timerParameter != null) {
+			console.log(`Setting Wait Seconds to [${waitSeconds}]`)
 			waitSeconds = parseInt(timerParameter);
 		}
 		resetTimer();
@@ -32,13 +33,16 @@
 	}
 
 	function resetTimer(){
+		console.log(`Reseeting time to [${waitSeconds}]`)
 		timer = waitSeconds;
+		dialling = false;
 	}
 
 	function stopCountdown() {
 		if (interval == null) return;
 		console.log('Clearing interval')
 		clearInterval(interval)
+		interval = null;
 	}
 
 	function startCountdown() {
@@ -60,6 +64,7 @@
 		if(currentState == state) return;
 		console.log(`Changing from state [${currentState}] to [${state}]`)
 		if(nextState == 'Countdown') resetTimer();
+		if(currentState == 'Countdown') stopCountdown();
 		nextState = state;
 		currentState = '';
 	}
