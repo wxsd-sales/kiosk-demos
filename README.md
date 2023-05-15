@@ -27,7 +27,7 @@ Cisco Webex Devices have a built in web browser which can be used to launch web 
 ### Installation Steps:
 
 
-## Building
+#### Building
 
 Open a new terminal window and follow the instructions below to setup the project locally for development/demo.
 
