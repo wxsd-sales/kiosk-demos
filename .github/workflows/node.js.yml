@@ -29,6 +29,9 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
+      - name: 'Create env file'
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
       - run: npm ci
       - run: REPO_NAME=${{ github.event.repository.name }} npm run build
       - name: Upload artifact

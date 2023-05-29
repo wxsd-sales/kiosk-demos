@@ -22,10 +22,12 @@
 		"@sveltejs/adapter-auto": "^1.0.0",
 		"@sveltejs/adapter-static": "^1.0.5",
 		"@sveltejs/kit": "^1.0.0",
+		"@types/parse-link-header": "^2.0.1",
 		"bulma": "^0.9.4",
 		"lottie-web": "^5.10.2",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
+		"query-string": "^8.1.0",
 		"sass": "^1.57.1",
 		"socket.io-client": "^4.5.4",
 		"svelte": "^3.54.0",
@@ -37,6 +39,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"flatten-anything": "^3.0.3"
+		"@tensorflow/tfjs": "^4.5.0",
+		"bulma-steps-component": "^0.5.3",
+		"flatten-anything": "^3.0.3",
+		"parse-link-header": "^2.0.0"
 	}
 }
