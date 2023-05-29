@@ -21,7 +21,7 @@
 	}
 
 	onMount(()=>{
-		console.log($page.url)
+		console.log($page.url.origin + $page.url.pathname)
 	})
 
 
