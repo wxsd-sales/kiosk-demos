@@ -17,10 +17,14 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+env: 
+  PUBLIC_WORKSPACE_CLIENT_ID:  ${{ vars.PUBLIC_WORKSPACE_CLIENT_ID }}
+  PUBLIC_WORKSPACE_SCOPES:  ${{ vars.PUBLIC_WORKSPACE_SCOPES }}
+  PUBLIC_WEBEX_OAUTH:  ${{ vars.PUBLIC_WEBEX_OAUTH }} 
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/configure-pages@v3
@@ -29,10 +33,6 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
-        env: 
-          PUBLIC_WORKSPACE_CLIENT_ID:  ${{ vars.PUBLIC_WORKSPACE_CLIENT_ID }}
-          PUBLIC_WORKSPACE_SCOPES:  ${{ vars.PUBLIC_WORKSPACE_SCOPES }}
-          PUBLIC_WEBEX_OAUTH:  ${{ vars.PUBLIC_WEBEX_OAUTH }}
       - run: npm ci
       - run: REPO_NAME=${{ github.event.repository.name }} npm run build
       - name: Upload artifact
