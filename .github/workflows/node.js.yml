@@ -21,9 +21,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    environment:
-      name: github-pages
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/configure-pages@v1
@@ -32,6 +29,13 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
+      - name: Display the environment variables and their values
+        run: |
+            print %ENV
+        env: 
+          PUBLIC_WORKSPACE_CLIENT_ID:  ${{ env.PUBLIC_WORKSPACE_CLIENT_ID }}
+          PUBLIC_WORKSPACE_SCOPES:  ${{ env.PUBLIC_WORKSPACE_SCOPES }}
+          PUBLIC_WEBEX_OAUTH:  ${{ env.PUBLIC_WEBEX_OAUTH }}
       - run: npm ci
       - run: REPO_NAME=${{ github.event.repository.name }} npm run build
       - name: Upload artifact
