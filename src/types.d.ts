@@ -8,3 +8,19 @@ export type Order = {
     location: string,
     items: Array<OderItem>
 };
+
+
+type Option = {
+    title: string,
+    logo: string
+}
+
+export type Theme = {
+    tag: string | 'wxsd',
+    logo: string,
+    background: string | null,
+    themeName: string | null,
+    welecomeText: string,
+    optionText: string,
+    options: Array<Option>
+}
