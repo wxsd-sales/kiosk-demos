@@ -22,6 +22,7 @@
 			waitSeconds = parseInt(timerParameter);
 		}
 		resetTimer();
+		handleHash();
 	});
 
 	function countDownCompleted() {

@@ -4,36 +4,43 @@
 	import HomeScreen from './screens/HomeScreen.svelte';
 	import ControlPanel from './screens/ControlPanel.svelte';
 	import Settings from './screens/Settings.svelte';
-	
+
 	const controllerScreens = {
-	  homeScreen: { component: HomeScreen, props: {} },
-	  controlPanel: { component: ControlPanel, props: {} },
-	  settings: { component: Settings, props: {} }
+		homeScreen: { component: HomeScreen, props: {} },
+		controlPanel: { component: ControlPanel, props: {} },
+		settings: { component: Settings, props: {} }
 	};
 
 	let activeComponent = controllerScreens.homeScreen;
 
-	
 	function showHomeScreen(e: CustomEvent) {
-	  if (import.meta.env.DEV) console.info(e);
-	  activeComponent = controllerScreens.homeScreen;
+		if (import.meta.env.DEV) console.info(e);
+		activeComponent = controllerScreens.homeScreen;
 	}
 
 	function showControPanel(e: CustomEvent) {
-	  if (import.meta.env.DEV) console.info(e);
-	  activeComponent = controllerScreens.controlPanel;
+		if (import.meta.env.DEV) console.info(e);
+		activeComponent = controllerScreens.controlPanel;
 	}
-  
+
 	function showSettings(e: CustomEvent) {
-	  if (import.meta.env.DEV) console.info(e);
-	  activeComponent = controllerScreens.settings;
+		if (import.meta.env.DEV) console.info(e);
+		activeComponent = controllerScreens.settings;
 	}
-  </script>
-  
-  <svelte:component
-	this={activeComponent.component}
-	{...activeComponent.props}
-	on:showHomeScreen={showHomeScreen}
-	on:showControPanel={showControPanel}
-	on:showSettings={showSettings}
-  />
+</script>
+
+<body class="hidescroll" id="scrollingBlock">
+	<svelte:component
+		this={activeComponent.component}
+		{...activeComponent.props}
+		on:showHomeScreen={showHomeScreen}
+		on:showControPanel={showControPanel}
+		on:showSettings={showSettings}
+	/>
+</body>
+
+<style>
+	:global(:root) {
+		overflow-y: hidden;
+	}
+</style>

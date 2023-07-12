@@ -23,6 +23,7 @@
 		"@sveltejs/adapter-static": "^1.0.5",
 		"@sveltejs/kit": "^1.0.0",
 		"@types/parse-link-header": "^2.0.1",
+		"@types/validator": "^13.7.17",
 		"bulma": "^0.9.4",
 		"lottie-web": "^5.10.2",
 		"prettier": "^2.8.0",
@@ -39,6 +40,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@imask/svelte": "^7.0.1",
 		"@tensorflow/tfjs": "^4.5.0",
 		"bulma-steps-component": "^0.5.3",
 		"crypto-js": "^4.1.1",

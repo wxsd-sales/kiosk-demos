@@ -38,3 +38,10 @@
 		<div class="hero-foot" />
 	</div>
 </section>
+
+
+<style>
+    :global(:root){
+		overflow-y: hidden;
+    }
+</style>
