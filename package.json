@@ -13,6 +13,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@bulatdashiev/svelte-slider": "^1.0.3",
 		"@fortawesome/fontawesome-svg-core": "^6.2.1",
 		"@fortawesome/free-solid-svg-icons": "^6.2.1",
 		"@fortawesome/svelte-fontawesome": "^0.2.0",
@@ -22,8 +23,10 @@
 		"@sveltejs/adapter-auto": "^1.0.0",
 		"@sveltejs/adapter-static": "^1.0.5",
 		"@sveltejs/kit": "^1.0.0",
+		"@types/node": "^20.4.2",
 		"@types/parse-link-header": "^2.0.1",
 		"@types/validator": "^13.7.17",
+		"@types/youtube-player": "^5.5.7",
 		"bulma": "^0.9.4",
 		"lottie-web": "^5.10.2",
 		"prettier": "^2.8.0",
@@ -42,10 +45,18 @@
 	"dependencies": {
 		"@imask/svelte": "^7.0.1",
 		"@tensorflow/tfjs": "^4.5.0",
+		"@vime/core": "^5.4.1",
+		"@vime/svelte": "^5.4.1",
+		"buffer": "^6.0.3",
+		"bulma-slider": "^2.0.5",
 		"bulma-steps-component": "^0.5.3",
 		"crypto-js": "^4.1.1",
+		"events": "^3.3.0",
 		"flatten-anything": "^3.0.3",
+		"hls.js": "^1.4.10",
+		"jsxapi": "^5.1.1",
 		"parse-link-header": "^2.0.0",
+		"svelte-youtube": "^0.0.2",
 		"validator": "^13.9.0"
 	}
 }
