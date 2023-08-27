@@ -182,7 +182,7 @@
 
 <svelte:window on:hashchange={handleHash} />
 
-<canvas bind:canvas id="myCanvas" width="500" height="500"></canvas>
-<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
+<canvas bind:this={canvas} id="myCanvas" width="500" height="500"></canvas>
+<button on:mousedown={()=>accelerate(-0.2)} on:mouseup={()=>accelerate(0.05)}>ACCELERATE</button>
 <p>Use the ACCELERATE button to stay in the air</p>
 <p>How long can you stay alive?</p>
