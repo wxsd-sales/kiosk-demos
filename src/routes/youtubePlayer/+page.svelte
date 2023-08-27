@@ -39,6 +39,7 @@
 	let playTime: number;
 	let title: number;
 	let rates: Array<number>;
+	let playRate: number;
 	let playState: string = 'unstarted'
 
 	async function onReady(event: any) {
@@ -82,6 +83,7 @@
 				break;
 			case 3: //Buffering
 				playTime = Math.round(event.detail.target.playerInfo.currentTime);
+				playRate = event.detail.target.playerInfo.playbackRate;
 				playState = 'Buffering';
 				updateController();
 				break;

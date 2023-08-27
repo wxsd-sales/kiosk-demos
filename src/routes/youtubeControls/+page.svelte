@@ -23,8 +23,8 @@
 	let playing = false;
 	let mute = false;
 	let title: string = 'Loading ....';
-	let playTime: number = 0;
-	let duration: number = 0;
+	let playTime: number = 20;
+	let duration: number = 100;
 
 	let interval: NodeJS.Timer | null = null;
 	let rates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75];
@@ -310,6 +310,7 @@
 				<div class="tile is-parent">
 					<div class="tile is-child container is-flex is-justify-content-center">
 						<input
+							
 							bind:value={playTime}
 							on:mouseup={updatePlayTime}
 							on:touchend={updatePlayTime}
@@ -345,6 +346,8 @@
 						</button>
 					</div>
 				</div>
+				
+
 				<div class="tile is-parent is-3 is-flex is-justify-content-center">
 					<div class="tile is-child is-flex">
 						<input
@@ -361,10 +364,39 @@
 				<div class="tile is-parent">
 					<div class="tile is-child" />
 				</div>
+				<div class="tile is-parent is-1 is-flex is-justify-content-center is-align-items-center">
+					<div class="tile is-child is-flex  is-flex-direction-column is-align-items-center">
+						<button class="button is-rounded is-large is-succcess" on:click={decreaseSpeed}>
+							<span class="icon">
+								<i class="fas fa-backward-fast" />
+							</span>
+						</button>
+					</div>
+				</div>
+				<div class="tile is-parent is-1 is-flex is-justify-content-center">
+					<div class="tile is-child is-flex is-flex-direction-column is-align-items-center">
+						<p>Playspeed</p>
+						<p>[ x{playRate} ]</p>
+						<!-- <div class="tile is-parent is-flex">
+							<div class="tile is-child is-flex is-justify-content-center">
+								[ x{playRate} ]
+							</div>
+						</div> -->
+					</div>
+				</div>
+				<div class="tile is-parent is-1 is-flex is-justify-content-center">
+					<div class="tile is-child is-flex  is-flex-direction-column is-align-items-center">
+						<button class="button is-rounded is-large is-succcess" on:click={increaseSpeed}>
+							<span class="icon">
+								<i class="fas fa-forward-fast" />
+							</span>
+						</button>
+					</div>
+				</div>
 				<!-- <div class="tile is-child is-flex ">
 					<h2 class="subtitle pl-3 pb-3">speed</h2>
 				</div> -->
-				<div class="tile is-vertical is-2">
+				<!-- <div class="tile is-vertical is-2">
 					<div class="tile is-vertical">
 						<div class="tile is-parent is-flex">
 							<div class="tile is-child is-flex is-justify-content-center">Playspeed</div>
@@ -397,7 +429,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 				<div class="tile is-parent">
 					<div class="tile is-child" />
@@ -422,3 +454,9 @@
 		</h2>
 	</div>
 </section>
+
+<style>
+
+
+
+</style>
