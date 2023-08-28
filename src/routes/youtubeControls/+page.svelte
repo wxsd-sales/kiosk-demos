@@ -23,7 +23,7 @@
 	let playing = false;
 	let mute = false;
 	let title: string = 'Loading ....';
-	let playTime: number = 20;
+	let playTime: number = 0;
 	let duration: number = 100;
 
 	let interval: NodeJS.Timer | null = null;
@@ -81,11 +81,21 @@
 					const volumeMute = await xapi.Status.Audio.VolumeMute.get();
 					mute = volumeMute == 'On';
 
+					xapi.Status.Audio.Volume.on((vol: number) => {
+						volume = vol;
+					});
+					xapi.Status.Audio.VolumeMute.on((muteState: string) =>{
+						mute = muteState == 'On';
+
+					});
+
+
 					resolve(true);
 				});
 		});
 	}
 
+	
 	function fmtMSS(s: number) {
 		return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s;
 	}
