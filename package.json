@@ -14,6 +14,7 @@
 	},
 	"devDependencies": {
 		"@bulatdashiev/svelte-slider": "^1.0.3",
+		"@faker-js/faker": "^8.0.2",
 		"@fortawesome/fontawesome-svg-core": "^6.2.1",
 		"@fortawesome/free-solid-svg-icons": "^6.2.1",
 		"@fortawesome/svelte-fontawesome": "^0.2.0",
@@ -56,6 +57,7 @@
 		"hls.js": "^1.4.10",
 		"jsxapi": "^5.1.1",
 		"parse-link-header": "^2.0.0",
+		"qrcode": "^1.5.3",
 		"svelte-youtube": "^0.0.2",
 		"validator": "^13.9.0"
 	}

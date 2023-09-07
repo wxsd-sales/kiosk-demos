@@ -1,0 +1,536 @@
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { flip } from 'svelte/animate';
+	import { fly } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
+	import WebexLogo from '$assets/webex-logo.svg';
+	import { Buffer } from 'buffer';
+	//import {connect as jxapi} from 'jsxapi'
+	import { XAPI, connect as jsxapi } from 'jsxapi/lib/browser';
+	//import type { Connect } from 'jsxapi/lib/connect';
+	//import type jsxapi from '$lib/jxapi';
+
+	interface Credentials {
+		username: string;
+		password: string;
+		ipAddress: string;
+	}
+
+	let credentials: Credentials;
+	let xapi: XAPI;
+	let connectionStatus = 'Connecting...';
+
+	let currentState: string = 'Standby';
+	let nextState = '';
+	let dialling = false;
+
+	let waitSeconds: number = 10;
+	let timer: number;
+	let interval: NodeJS.Timer | null = null;
+
+	onMount(() => {
+		resetTimer();
+		window.Buffer = Buffer;
+		console.log('onMount ran');
+		const hash = window.location.hash.split('#').pop();
+		if (hash === undefined) return;
+		const decoded = window.atob(hash);
+		credentials = JSON.parse(decoded);
+		console.log('Credentials:', JSON.stringify(credentials));
+
+		jsxapi({
+			host: credentials.ipAddress,
+			protocol: 'wss:',
+			username: credentials.username,
+			password: credentials.password
+		})
+			.on('error', console.error)
+			.on('ready', async (connection: XAPI) => {
+				connectionStatus = `Connected [${credentials.ipAddress}]`;
+				xapi = connection;
+				console.log(`Connected to device [${credentials.ipAddress}]`);
+				xapi.Config.RoomAnalytics.PeopleCountOutOfCall.set('On');
+				xapi.Config.RoomAnalytics.PeoplePresenceDetector.set('On');
+				xapi.Status.RoomAnalytics.Engagement.CloseProximity.on((state: string) =>
+					processChange('CloseProximity', state)
+				);
+				xapi.Status.RoomAnalytics.PeopleCount.Current.on((state: string) =>
+					processChange('PeopleCount', state)
+				);
+			});
+	});
+
+	async function processChange(type: string, state: string) {
+		//if(suspend) return;
+
+		const calls = await xapi.Status.SystemUnit.State.NumberOfActiveCalls.get();
+		if (calls > 0) return;
+
+		let close = null;
+		let count = null;
+
+		switch (type) {
+			case 'CloseProximity':
+				close = state;
+				count = await xapi.Status.RoomAnalytics.PeopleCount.Current.get();
+				break;
+			case 'PeopleCount':
+				count = state;
+				close = await xapi.Status.RoomAnalytics.Engagement.CloseProximity.get();
+				break;
+		}
+
+		if ((count < 1 || close == 'False') && interval != null) {
+			changeState('Standby');
+			stopCountdown();
+			console.log(
+				`Count [${count}] - Close [${close}] - Change Type [${type}] - Detection Ended, resetting timer`
+			);
+			return;
+		} else if (count > 0 && close == 'True' && interval == null) {
+			changeState('Countdown');
+			console.log(
+				`Count [${count}] - Close [${close}] - Change Type [${type}] - New detection detected, starting timer`
+			);
+			return;
+		} else {
+			console.log(`Count [${count}] - Close [${close}] - Change Type [${type}] - Ignoring`);
+			return;
+		}
+	}
+
+	function countDownCompleted() {
+		dialling = true;
+		console.log('Countdown completd, notifying device');
+	}
+
+	function resetTimer() {
+		console.log(`Reseeting time to [${waitSeconds}]`);
+		timer = waitSeconds;
+		dialling = false;
+	}
+
+	function stopCountdown() {
+		if (interval == null) return;
+		console.log('Clearing interval');
+		clearInterval(interval);
+		interval = null;
+	}
+
+	function startCountdown() {
+		console.log('Starting Countdown');
+		if (interval != null) return;
+		interval = setInterval(countdown, 1000);
+	}
+
+	function countdown() {
+		if (timer == 0) {
+			stopCountdown();
+			countDownCompleted();
+		} else {
+			timer = timer - 1;
+		}
+	}
+
+	function changeState(state: string) {
+		if (currentState == state) return;
+		console.log(`Changing from state [${currentState}] to [${state}]`);
+		if (nextState == 'Countdown') resetTimer();
+		if (currentState == 'Countdown') stopCountdown();
+		nextState = state;
+		currentState = '';
+	}
+
+	function enableNextState() {
+		currentState = nextState;
+	}
+
+	function exitKiosk() {
+		if (xapi) {
+			console.log('Exiting Kiosk Mode, changing device kiosk mode config to Off');
+			xapi.Config.UserInterface.Kiosk.Mode.set('Off');
+		} else {
+			console.log('Not connected, cannot exit kiosk mode');
+		}
+	}
+
+	function handleHash() {
+		console.log('Hash Updated: ' + location.hash);
+		if (!location.hash.startsWith('#state=')) return;
+		const hash = location.hash.replace('#state=', '');
+		console.log('Hash State: ', hash);
+		changeState(hash);
+	}
+</script>
+
+<svelte:window on:hashchange={handleHash} />
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../images/fav_icon.png" type="image/x-icon">
+    <title>Modal Cards - Free Bulma template</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <!-- Bulma Version 0.9.4-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/hero.css">
+    <link rel="stylesheet" href="https://unpkg.com/bulma-modal-fx/dist/css/modal-fx.min.css" />
+    <style>
+    .columns:nth-child(2)
+    {margin-top: -10rem;}
+    ::-webkit-scrollbar{height:10px;width:10px}::-webkit-scrollbar-track{background:#efefef;border-radius:6px}::-webkit-scrollbar-thumb{background:#d5d5d5;border-radius:6px}::-webkit-scrollbar-thumb:hover{background:#c4c4c4}
+    </style>
+  </head>
+  <body>
+    <section class="hero is-info is-small">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <p class="title">
+            Modal Cards
+          </p>
+          <p class="subtitle">
+            Subtitle
+          </p>
+        </div>
+      </div>
+    </section>
+    <div class="box cta">
+      <p class="has-text-centered">
+        <span class="tag is-primary">New</span> Here we have modal cards. When you click on them they will open functional modal examples.
+      </p>
+    </div>
+    <section class="container">
+      <div class="columns features">
+        <div class="column is-4">
+          <div class="card is-shady">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://images.unsplash.com/photo-1515555230216-82228b88ea98?auto=format&amp;fit=crop&amp;w=900&amp;q=60" alt="Placeholder image" class="modal-button" data-target="modal-image2">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <h4>Click on image above</h4>
+                <p>Purus semper eget duis at tellus at urna condimentum mattis. Non blandit massa enim nec. Integer enim neque volutpat ac tincidunt vitae semper quis. Accumsan tortor posuere ac ut consequat semper viverra nam.</p>
+                <span class="button is-link modal-button" data-target="modal-image2">Image modal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="card is-shady">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://res.cloudinary.com/crakerss/image/upload/c_scale,q_auto:eco,w_1440/v1502988509/background_conifer/MS.jpg" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <h4>Tempor orci dapibus faber in.</h4>
+                <p>Ut venenatis tellus in metus vulputate. Amet consectetur adipiscing elit pellentesque. Sed arcu non odio euismod lacinia at quis risus. Faucibus turpis in eu mi bibendum neque egestas cmonsu songue. Phasellus vestibulum lorem
+                sed risus.</p>
+                <span class="button is-link modal-button" data-target="modal-card">Modal Card</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-4 modal-button" data-target="modal-image">
+          <div class="card is-shady">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://res.cloudinary.com/ameo/image/upload/v1568711475/pexels-photo-1302883_fjje0f.jpg" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <h4>Click anywhere on card</h4>
+                <p>Imperdiet dui accumsan sit amet nulla facilisi morbi. Fusce ut placerat orci nulla pellentesque dignissim enim. Libero id faucibus nisl tincidunt eget nullam. Commodo viverra maecenas accumsan lacus vel facilisis.</p>
+                <span class="button is-link modal-button" data-target="modal-image">Image modal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns features">
+        <div class="column is-4 modal-button" data-target="modal-card">
+          <div class="card is-shady">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://res.cloudinary.com/ameo/image/upload/v1568711475/pexels-photo-1302883_fjje0f.jpg" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="content">
+                <h4>Click anywhere on card to <br>expand into modal card</h4>
+                <p>Purus semper eget duis at tellus at urna condimentum mattis. Non blandit massa enim nec. Integer enim neque volutpat ac tincidunt vitae semper quis. Accumsan tortor posuere ac ut consequat semper viverra nam.</p>
+                <span class="button is-link modal-button">Modal card</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="card is-shady">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://images.unsplash.com/photo-1529774172307-627a0ae46dae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="butterfly image" class="modal-button" data-target="modal-image4">
+              </figure>
+            </div>
+            <div class="card-content  modal-button" data-target="modal-card2">
+              <div class="content">
+                <h4>Click anywhere on card to <br>expand into modal card - header image expands into bigger image</h4>
+                <p>Purus semper eget duis at tellus at urna condimentum mattis. Non blandit massa enim nec. Integer enim neque volutpat ac tincidunt vitae semper quis.</p>
+                <span class="button is-link modal-button">Modal card</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <section class="section">
+        <div class="container">
+          <div class="columns is-multiline">
+            <div class="column is-one-third">
+              <article class="notification media has-background-white">
+                <figure class="media-left">
+                  <span class="icon">
+                    <i class="has-text-warning fa fa-columns fa-lg"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">Columns</h1>
+                    <p class="is-size-5 subtitle">
+                      The power of <strong>Flexbox</strong> in a simple interface
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="column is-one-third">
+              <article class="notification has-background-white media">
+                <figure class="media-left">
+                  <span class="icon has-text-info">
+                    <i class="fa fa-lg fa-wpforms"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">Form</h1>
+                    <p class="is-size-5 subtitle">
+                      The indispensable <strong>form controls</strong>, designed for maximum clarity
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="column is-one-third">
+              <article class="notification has-background-white media">
+                <figure class="media-left">
+                  <span class="icon has-text-danger">
+                    <i class="fa fa-lg fa-cubes"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">Components</h1>
+                    <p class="is-size-5 subtitle">
+                      Advanced multi-part components with lots of possibilities
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="column is-one-third">
+              <article class="notification has-background-white media">
+                <figure class="media-left">
+                  <span class="icon has-text-grey">
+                    <i class="fa fa-lg fa-cogs"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">Modifiers</h1>
+                    <p class="is-size-5 subtitle">
+                      An <strong>easy-to-read</strong> naming system designed for humans
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="column is-one-third">
+              <article class="notification has-background-white media">
+                <figure class="media-left">
+                  <span class="icon has-text-primary">
+                    <i class="fa fa-lg fa-superpowers"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">Layout</h1>
+                    <p class="is-size-5 subtitle">
+                      Design the <strong>structure</strong> of your webpage with these CSS classes
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="column is-one-third">
+              <article class="notification has-background-white media">
+                <figure class="media-left">
+                  <span class="icon has-text-danger">
+                    <i class="fa fa-lg fa-cube"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">Elements</h1>
+                    <p class="is-size-5 subtitle">
+                      Essential interface elements that only require a <strong>single CSS class</strong>
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="content has-text-centered">
+        <div class="control level-item">
+          <a href="https://github.com/BulmaTemplates/bulma-templates">
+            <div class="tags has-addons">
+              <span class="tag is-dark">Bulma Templates</span>
+              <span class="tag is-info">MIT license</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </footer>
+    <!--  ===============
+    HERE BE MODALS
+    ===============  -->
+    <!-- 3dFlipVertical card tiny -->
+    <div id="modal-card" class="modal modal-fx-3dSlit">
+      <div class="modal-background"></div>
+      <div class="modal-content is-tiny">
+        <!-- content -->
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img src="https://images.unsplash.com/photo-1515555230216-82228b88ea98?auto=format&amp;fit=crop&amp;w=900&amp;q=60" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="https://res.cloudinary.com/ameo/image/upload/v1639144778/typocat_svbspx.png" alt="avatar">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">Jane Doe</p>
+                <p class="subtitle is-6">@jane_doe</p>
+              </div>
+            </div>
+            <div class="content">
+              Laum Ipsum apricot peaches venison bookin' it. Moosetown rig up I'm tellin' you way up north bookin' it can't get theyah from heeyah native bean suppah whawf Powrtland Museum of Aht, back woods hawsun around the pit mummah Yessah, mummah muckle riyht on'ta her
+              Bean's dinnahbucket bub geez bud sumpin' fierce ayuhpawt Bangah naw, Powrtland Museum of Aht down cellah sumpin' fierce hoppa bub If you can't stand the wintah you don't deserve the summah slower than molasses going uphill in January.
+              Sgn'wahl shoggor hrii uaaah R'lyeh uh'e k'yarnak Hastur hupadgh li'hee, hai f'nilgh'ri nilgh'ri n'ghftor ngftaghu vulgtlagln h'hrii throd Nyarlathotep lloig, naflsll'ha nnnsll'ha athg y-ebunma goka chtenff ehyeog cehye. Zhro y'hah
+              nogoth phlegeth stell'bsna orr'e ph'Hastur gnaiih throd, uln ya lw'nafh mg nar'luh li'hee wgah'n, sgn'wahl mg nakadishtu chlirgh hupadgh tharanak h'gnaiih.
+              <a>@bulmaio</a>.
+              <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br>
+              <time datetime="2018-02-02">12:45 AM - 20 June 2018</time>
+            </div>
+          </div>
+        </div>
+        <!-- end content -->
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <!-- end tiny modal card -->
+    <!-- 3dFlipVertical card tiny [butterfly] -->
+    <div id="modal-card2" class="modal modal-fx-3dSlit">
+      <div class="modal-background"></div>
+      <div class="modal-content is-tiny">
+        <!-- content -->
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img src="https://images.unsplash.com/photo-1529774172307-627a0ae46dae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="butterfly">
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="https://randomuser.me/api/portraits/women/18.jpg" alt="woman">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">Jane Doe</p>
+                <p class="subtitle is-6">@jane_doe</p>
+              </div>
+            </div>
+            <div class="content">
+              Laum Ipsum junkah potatoes bookin' it. Moosetown rig up I'm tellin' you way up north bookin' it can't get theyah from heeyah native bean suppah whawf Powrtland Museum of Aht, back woods hawsun around the pit mummah Yessah, mummah muckle riyht on'ta her
+              Bean's dinnahbucket bub geez bud sumpin' fierce ayuhpawt Bangah naw, Powrtland Museum of Aht down cellah sumpin' fierce hoppa bub If you can't stand the wintah you don't deserve the summah slower than molasses going uphill in January.
+              Sgn'wahl shoggor hrii uaaah R'lyeh uh'e k'yarnak Hastur hupadgh li'hee, hai f'nilgh'ri nilgh'ri n'ghftor ngftaghu vulgtlagln h'hrii throd Nyarlathotep lloig, naflsll'ha nnnsll'ha athg y-ebunma goka chtenff ehyeog cehye. Zhro y'hah
+              nogoth phlegeth stell'bsna orr'e ph'Hastur gnaiih throd, uln ya lw'nafh mg nar'luh li'hee wgah'n, sgn'wahl mg nakadishtu chlirgh hupadgh tharanak h'gnaiih.
+              <a>@bulmaio</a>.
+              <a href="#">#css</a>
+              <a href="#">#responsive</a>
+              <br>
+              <time datetime="2018-02-02">12:45 AM - 20 May 2018</time>
+            </div>
+          </div>
+        </div>
+        <!-- end content -->
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <!-- end tiny modal card -->
+    <!-- Image modal -->
+    <div id="modal-image2" class="modal modal-fx-3dSlit">
+      <div class="modal-background"></div>
+      <div class="modal-content is-huge is-image">
+        <!-- content -->
+        <img src="https://images.unsplash.com/photo-1515555230216-82228b88ea98?auto=format&amp;fit=crop&amp;w=900&amp;q=60" alt="image">
+        <!-- end content -->
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <!-- Image modal -->
+    <div id="modal-image4" class="modal modal-fx-3dSlit">
+      <div class="modal-background"></div>
+      <div class="modal-content is-huge is-image">
+        <!-- content -->
+        <img src="https://images.unsplash.com/photo-1529774172307-627a0ae46dae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="butterfly">
+        <!-- end content -->
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <!-- Image modal-->
+    <div id="modal-image" class="modal modal-fx-superScaled">
+      <div class="modal-background"></div>
+      <div class="modal-content  is-image">
+        <!-- content -->
+        <img src="https://res.cloudinary.com/ameo/image/upload/v1568711475/pexels-photo-1302883_fjje0f.jpg" alt="Placeholder image">
+        <!--     <img src="https://source.unsplash.com/zFrUz_tNjCY" alt="placeholder">
+        -->    <!-- end content -->
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+    <script src="https://unpkg.com/bulma-modal-fx/dist/js/modal-fx.min.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+  integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE="
+  crossorigin="anonymous"></script>    <script src="../js/wild.js"></script>
+  </body>
+</html>

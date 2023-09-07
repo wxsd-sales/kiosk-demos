@@ -24,3 +24,9 @@ export type Theme = {
     optionText: string,
     options: Array<Option>
 }
+
+export type WebSocketCredentials ={
+    username: string;
+    password: string;
+    ipAddress: string;
+}
