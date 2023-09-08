@@ -12,19 +12,15 @@
 	const colors = ['green', 'blue', 'red', 'yellow', 'orange', 'black', 'white'];
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
-	let flag = false;
+	let down = false;
 	let prevX = 0;
 	let currX = 0;
 	let prevY = 0;
 	let currY = 0;
-	let dot_flag = false;
-
 	let selectedColor = 'black';
-	let y = 2;
-
+	let brushSize = 3;
 	let interactive: boolean = true;
 	let uuid = self.crypto.randomUUID();
-
 	let lines: Array<[string, string]> = [];
 
 	onMount(() => {
@@ -42,7 +38,7 @@
 					error: `Failed to connect [${credentials.ipAddress}]`
 				},
 				{
-					position: 'bottom-center',
+					position: 'top-center',
 					duration: 4000
 				}
 			);
@@ -57,7 +53,6 @@
 		canvas.height = window.innerHeight;
 
 		const userAgent = window.navigator.userAgent;
-		console.log(userAgent);
 
 		if (userAgent.includes('RoomOS')) {
 			if (
@@ -71,6 +66,7 @@
 	});
 
 	function processTouchStart(ev: TouchEvent) {
+		console.log('Touch Start');
 		const touch = ev.targetTouches.length >= 1 ? ev.targetTouches.item(0) : ev.touches.item(0);
 		if (touch != null) {
 			findxy('down', touch);
@@ -78,7 +74,7 @@
 	}
 
 	function processTouchMove(ev: TouchEvent) {
-		console.log('Touch Move Event', JSON.stringify(ev));
+		console.log('Touch Move');
 		const touch = ev.targetTouches.length >= 1 ? ev.targetTouches.item(0) : ev.touches.item(0);
 		if (touch != null) {
 			findxy('move', touch);
@@ -87,60 +83,84 @@
 
 	function processTouchEnd(ev: TouchEvent) {
 		const touch = ev.targetTouches.length >= 1 ? ev.targetTouches.item(0) : ev.touches.item(0);
-		if (touch != null) {
-			findxy('up', touch);
-		}
+		console.log(
+			'Touch End',
+			touch,
+			'Lenght = ',
+			ev.targetTouches.length,
+			' Touch itme',
+			ev.touches.item(0)
+		);
+		findxy('up');
 	}
 
 	function processCancel(ev: TouchEvent | MouseEvent) {
+		console.log('Touch or mouse cancel');
 		ev.preventDefault();
 	}
 
 	function processMouseDown(ev: MouseEvent) {
+		console.log('mouse down event');
 		findxy('down', ev);
 	}
 
 	function processMouseMove(ev: MouseEvent) {
+		console.log('Mouse Move');
 		findxy('move', ev);
 	}
 
-	function findxy(res: string, e: MouseEvent | Touch) {
-		if (res == 'down') {
-			prevX = currX;
-			prevY = currY;
+	function processMouseEnd(ev: MouseEvent) {
+		console.log('mouse end event');
+		findxy('up', ev);
+	}
+
+	function findxy(res: string, e?: MouseEvent | Touch) {
+		if (res == 'down' && e) {
+			if (down) return;
+			down = true;
 			currX = e.clientX - canvas.offsetLeft;
 			currY = e.clientY - canvas.offsetTop;
 
-			flag = true;
-			dot_flag = true;
-			if (dot_flag) {
-				ctx.beginPath();
-				ctx.fillStyle = selectedColor;
-				ctx.fillRect(currX, currY, 2, 2);
-				ctx.closePath;
-				lines.push([currX.toFixed(2), currY.toFixed(2)]);
-				lines.push([(currX + 2).toFixed(2), (currY + 2).toFixed(2)]);
-				dot_flag = false;
-			}
+			drawDot(selectedColor, brushSize, window.innerWidth, window.innerHeight, [currX, currY]);
+			// ctx.beginPath();
+			// ctx.fillStyle = selectedColor;
+			//ctx.roundRect(currX-(brushSize/2), currY-(brushSize/2), brushSize, brushSize);
+
+			// ctx.arc(currX, currY, brushSize / 2, 0, 2 * Math.PI);
+			// ctx.fill();
+			lines.push([currX.toFixed(3), currY.toFixed(3)]);
+			sendMessage('dot', lines);
+			prevX = currX;
+			prevY = currY;
+			// sendMessage('dot', [currX.toFixed(2), currY.toFixed(2)]);
+			//lines.push([(currX + 2).toFixed(2), (currY + 2).toFixed(2)]);
 		}
 		if (res == 'up' || res == 'out') {
+			console.log('Mouse Up');
 			sendMessage('line', lines);
 			lines = [];
-			flag = false;
+			drawDot(selectedColor, brushSize, window.innerWidth, window.innerHeight, [currX, currY]);
+			down = false;
 		}
-		if (res == 'move') {
-			if (flag) {
+		if (res == 'move' && e) {
+			if (down) {
 				prevX = currX;
 				prevY = currY;
-				currX = e.clientX - canvas.offsetLeft;
-				currY = e.clientY - canvas.offsetTop;
+				currX = e.clientX - canvas.offsetLeft - brushSize / 2;
+				currY = e.clientY - canvas.offsetTop - brushSize / 2;
 				lines.push([currX.toFixed(2), currY.toFixed(2)]);
 				if (lines.length > 20) {
 					sendMessage('line', lines);
 					lines = [];
 					lines.push([currX.toFixed(2), currY.toFixed(2)]);
 				}
-				draw();
+		
+				drawLine(
+					selectedColor,
+					brushSize,
+					window.innerWidth, window.innerHeight,
+					[prevX, prevY, currX, currY]
+				)
 			}
 		}
 	}
@@ -155,35 +175,49 @@
 		return ((maxAllowed - minAllowed) * (currentNum - min)) / (max - min) + minAllowed;
 	}
 
-	function draw() {
+	function drawDot(
+		color: string,
+		size: number,
+		canvasWidth: number,
+		canvasHeight: number,
+		[x1, y1]: Array<number>
+	) {
+		console.log('Drawing a dot', x1, y1, size);
+		if (canvasWidth != window.innerWidth || canvasHeight != window.innerHeight) {
+			x1 = mapBetween(x1, 0, window.innerWidth, 0, canvasWidth);
+			y1 = mapBetween(y1, 0, window.innerHeight, 0, canvasHeight);
+		}
 		ctx.beginPath();
-		ctx.moveTo(prevX, prevY);
-		ctx.lineTo(currX, currY);
-		ctx.strokeStyle = selectedColor;
-		ctx.lineWidth = y;
-		ctx.stroke();
-		ctx.closePath();
+		ctx.fillStyle = color;
+		ctx.arc(x1, y1, size / 2, 0, 2 * Math.PI);
+		ctx.fill();
 	}
 
-	function drawLine(
+	function drawLine( 
 		color: string,
-		lineWidth: number,
+		size: number,
 		canvasWidth: number,
 		canvasHeight: number,
 		[x1, y1, x2, y2]: Array<number>
 	) {
-		const convertx1 = mapBetween(x1, 0, window.innerWidth, 0, canvasWidth);
-		const converty1 = mapBetween(y1, 0, window.innerHeight, 0, canvasHeight);
-		const convertx2 = mapBetween(x2, 0, window.innerWidth, 0, canvasWidth);
-		const converty2 = mapBetween(y2, 0, window.innerHeight, 0, canvasHeight);
+		if(Math.abs(x1-x2)< 1.2 || Math.abs(y1-y2)< 1.2){
+			drawDot(color, size, canvasWidth, canvasHeight, [(x1 + x2) / 2, (y1 + y2) / 2]);
+		}
+
+		if (canvasWidth != window.innerWidth || canvasHeight != window.innerHeight) {
+			x1 = mapBetween(x1, 0, window.innerWidth, 0, canvasWidth);
+			y1 = mapBetween(y1, 0, window.innerHeight, 0, canvasHeight);
+			x2 = mapBetween(x2, 0, window.innerWidth, 0, canvasWidth);
+			y2 = mapBetween(y2, 0, window.innerHeight, 0, canvasHeight);
+		}
 
 		ctx.beginPath();
-		ctx.moveTo(convertx1, converty1);
-		ctx.lineTo(convertx2, converty2);
 		ctx.strokeStyle = color;
-		ctx.lineWidth = lineWidth;
+		ctx.lineWidth = size;
+		ctx.moveTo(x1, y1);
+		ctx.lineTo(x2, y2);
+
 		ctx.stroke();
-		ctx.closePath();
 	}
 
 	function parseString(str: string) {
@@ -202,7 +236,6 @@
 			toast.error('Missing Hash Value');
 			return;
 		}
-
 		const decoded = window.atob(hash);
 		return parseString(decoded);
 	}
@@ -222,56 +255,59 @@
 				})
 				.on('ready', async (connection: XAPI) => {
 					xapi = connection;
-
-					precessMessage;
-
+					xapi.Event.Message.Send.on(processMessage);
 					resolve(true);
 				});
 		});
 	}
 
 	function sendMessage(type: string, array?: Array<[string, string]>) {
+		if (xapi === undefined) return;
 		const payload = {
 			uuid: uuid,
 			type: type,
 			color: selectedColor,
 			canvasWidth: window.innerWidth,
 			canvasHeight: window.innerHeight,
-			lineWidth: y,
+			lineWidth: brushSize,
 			data: array
 		};
-		console.log('Sending:', JSON.stringify(payload));
+		//console.log('Sending:', JSON.stringify(payload));
 		xapi.Command.Message.Send({ Text: JSON.stringify(payload) });
 	}
 
-	function precessMessage(event: { Text: string }) {
+	function processMessage(event: { Text: string }) {
 		const message = parseString(event.Text);
 		if (!message) return;
 		if (message.uuid === uuid) return;
+		console.log(JSON.stringify(message));
 
-		if (message.type === 'clear') {
-			clear();
-			return;
-		}
-
-		const data = message.data;
-		console.log('Coordinates: ', JSON.stringify(data));
-
-		if (message.data.length < 2) return;
-
-		let [x1, y1] = message.data.shift();
-		console.log('First xy', x1, y1);
-
-		while (message.data.length > 0) {
-			let [x2, y2] = message.data.shift();
-			drawLine(message.color, message.lineWidth, message.canvasWidth, message.canvasHeight, [
-				x1,
-				y1,
-				x2,
-				y2
-			]);
-
-			[x1, y1] = [x2, y2];
+		switch (message.type) {
+			case 'clear':
+				clear();
+				break;
+			case 'dot':
+				drawDot(
+					message.color,
+					message.lineWidth,
+					message.canvasWidth,
+					message.canvasHeight,
+					message.data.pop()
+				);
+				break;
+			case 'line':
+				let [x1, y1] = message.data.shift();
+				while (message.data.length > 0) {
+					let [x2, y2] = message.data.shift();
+					drawLine(message.color, message.lineWidth, message.canvasWidth, message.canvasHeight, [
+						Number(x1),
+						Number(y1),
+						Number(x2),
+						Number(y2)
+					]);
+					[x1, y1] = [x2, y2];
+				}
+				break;
 		}
 	}
 
@@ -292,19 +328,12 @@
 	}
 </script>
 
-<svelte:head>
-	<meta
-		name="viewport"
-		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-	/>
-</svelte:head>
-
 <Toaster />
 <canvas
 	bind:this={canvas}
 	on:mousedown={processMouseDown}
 	on:mousemove={processMouseMove}
-	on:mouseup={processCancel}
+	on:mouseup={processMouseEnd}
 	on:touchstart={processTouchStart}
 	on:touchmove={processTouchMove}
 	on:touchcancel={processCancel}
@@ -313,7 +342,11 @@
 
 {#if interactive}
 	<div id="toolkit" class="p-2">
-		<div class="buttons are-large">
+		<div class="buttons are-medium">
+			<div class="pr-1">
+				<input bind:value={brushSize} type="range" min="1" max="10" />
+			</div>
+
 			{#each colors as color}
 				<button
 					class="button is-rounded"
@@ -373,24 +406,4 @@
 		align-items: center;
 	}
 
-	/* .button {
-		background-color: #94b8b8;
-		border: 2px solid #808080;
-		border-radius: 50%;
-		color: black;
-		text-align: center;
-		display: inline-block;
-		margin: 5px 5px;
-		width: 55px;
-		height: 55px;
-	} */
-
-	.colorSelect {
-		display: inline-block;
-		border: 2px solid #808080;
-		margin: 5px 5px;
-		border-radius: 50%;
-		width: 50px;
-		height: 50px;
-	}
 </style>
