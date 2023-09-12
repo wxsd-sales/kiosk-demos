@@ -328,6 +328,10 @@
 	}
 </script>
 
+<svelte:head>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+</svelte:head>
+
 <Toaster />
 <canvas
 	bind:this={canvas}

@@ -11,10 +11,7 @@
 	import sourceCodeImage from '$lib/assets/teamInfo/sourceCode.jpg';
 	import webexLabsImage from '$lib/assets/teamInfo/webexLabs.jpg';
 
-	const team = [
-		'askmrsinh',
-		'zoneix'
-	]
+	const team = ['askmrsinh', 'akoushke', 'rajithaBK', 'tahanson-cisco', 'wmpmills', 'zoneix'];
 
 	onMount(() => {});
 </script>
@@ -36,41 +33,45 @@
 			<h2 class="subtitle has-text-grey-lighter">Delivering the Art of the Possible</h2>
 		</div>
 	</div>
-	
+
 	<div class="hero-body">
+		<div class="container">
+			<div class="container is-widescreen">
+				<div class="tile is-ancestor">
+					<div class="tile is-parent">
+						<div class="title" />
+						{#each team as member}
+							<div class="title is-1">
+								<figure class="image blog-img is-64x64">
+									<img
+										class="is-rounded"
+										src="https://github.com/{member}.png"
+										alt="GitHub Avatar"
+									/>
+								</figure>
+							</div>
+						{/each}
+						<div class="title" />
+					</div>
+				</div>
+			</div>
 
 		
-
-		<div class="container">
-
-			
-			
-
-				{#each team as member}
-
-				<div class="container">
-					<figure class="image blog-img is-64x64">
-						<img  class="is-rounded" src="https://github.com/{member}.png"alt="GitHub Avatar" >
-					</figure>
-				</div>
-				
-				{/each}
-			 
-
 			<div class="columns">
 				<div class="columns is-multiline">
 					<div class="column post is-4">
 						<article class="columns is-multiline">
 							<div class="column is-12">
-
 								<figure class="image blog-img is-16by9">
-									<img class="blog-img" src={webexLabsImage} alt="WebexLabs" >
-								  </figure>
+									<img class="blog-img" src={webexLabsImage} alt="WebexLabs" />
+								</figure>
 							</div>
 							<div class="column is-12 featured-content">
 								<h3 class="has-text-info">Demos</h3>
 								<h1 class="title pt-2 has-text-white">Webex Labs Demos on Collab Toolbox</h1>
-								<h2 class="subtitle pt-2 has-text-grey-lighter">Check out our catalog of Proof of Concept demos at Webex Labs </h2>
+								<h2 class="subtitle pt-2 has-text-grey-lighter">
+									Check out our catalog of Proof of Concept demos at Webex Labs
+								</h2>
 								<a
 									href="https://collabtoolbox.cisco.com/webex-labs"
 									class="button is-primary has-text-grey-darker">Webex Labs</a
@@ -81,21 +82,17 @@
 					<div class="column post is-4">
 						<article class="columns is-multiline">
 							<div class="column is-12">
-						
-
 								<figure class="image blog-img is-16by9">
-									<img class="blog-img" src={sourceCodeImage} alt="SourceCode" >
-								  </figure>
+									<img class="blog-img" src={sourceCodeImage} alt="SourceCode" />
+								</figure>
 							</div>
 							<div class="column is-12 featured-content">
 								<h3 class="has-text-info">Source Code</h3>
 								<h1 class="title pt-2 has-text-white">Source Code Available On GitHub</h1>
-								<h2 class="subtitle pt-2 has-text-grey-lighter">All our projects are open source and available on GitHub 👍</h2>
-								
+								<h2 class="subtitle pt-2 has-text-grey-lighter">
+									All our projects are open source and available on GitHub 👍
+								</h2>
 
-
-						
-							
 								<a
 									href="https://github.com/wxsd-sales"
 									class="button is-primary has-text-grey-darker">GitHub Repo</a
@@ -107,18 +104,17 @@
 						<article class="columns is-multiline">
 							<div class="column is-12">
 								<figure class="image blog-img is-16by9">
-									<img class="blog-img" src={messageImage} alt="Message" >
-								  </figure>
+									<img class="blog-img" src={messageImage} alt="Message" />
+								</figure>
 							</div>
 							<div class="column is-12 featured-content">
-								
 								<h3 class="has-text-info">Engage</h3>
 								<h1 class="title pt-2 has-text-white">Engage With Our Team</h1>
-								<h2 class="subtitle pt-2 has-text-grey-lighter">Got a customer engagement and want to show them the art of the possible? Message
-									our engagement Bot</h2>
+								<h2 class="subtitle pt-2 has-text-grey-lighter">
+									Got a customer engagement and want to show them the art of the possible? Message
+									our engagement Bot
+								</h2>
 
-
-							
 								<a
 									href="webexteams://im?email=globalexpert@webex.bot"
 									class="button is-primary has-text-grey-darker">Message Bot 🤖</a
@@ -131,13 +127,10 @@
 		</div>
 	</div>
 
-	<div class="hero-footer"/>
+	<div class="hero-footer" />
 </section>
 
-
 <style>
-
-
 	a:hover {
 		text-decoration: underline;
 		color: #3b7adf;
@@ -154,14 +147,6 @@
 	.hero {
 		background: #060606;
 	}
-
-	
-
-	
-	
-
-
-	
 
 	.blog-img {
 		border-radius: 6px;
