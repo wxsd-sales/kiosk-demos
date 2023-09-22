@@ -37,7 +37,7 @@
 		</div>
 	</section>
 {:else}
-	<iframe title="YouTube" aria-hidden="true" tabindex="-1" src={video} hidden />
+	<iframe title="YouTube" aria-hidden="true" tabindex="-1" src="{video}?autoplay=1" hidden allow="autoplay"/>
 	<iframe
 		style=" display: block; width: 100vw; height: 100vh;  border: none"
 		title="Spaces"
