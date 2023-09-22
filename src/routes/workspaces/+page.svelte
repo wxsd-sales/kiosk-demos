@@ -4,6 +4,7 @@
 	import WebexLogo from '$assets/webex-logo.svg';
 	import webexoauth from '$lib/webexoauth';
 	import workspaceReport from '$lib/workspaceReport';
+	
 
 	const accessToken = webexoauth.getWebexAccessToken();
 	let currentStep = accessToken == undefined ? 0 : 1;

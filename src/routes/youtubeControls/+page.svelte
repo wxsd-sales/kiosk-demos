@@ -333,12 +333,6 @@
 				</div>
 			</div>
 
-			<!-- <div class="tile">
-				<div class="tile is-parent">
-					<section class="tile is-child section" />
-				</div>
-			</div> -->
-
 			<div class="tile">
 				<div class="tile is-parent">
 					<div class="tile is-child" />
@@ -387,11 +381,6 @@
 					<div class="tile is-child is-flex is-flex-direction-column is-align-items-center">
 						<p>Playspeed</p>
 						<p>[ x{playRate} ]</p>
-						<!-- <div class="tile is-parent is-flex">
-							<div class="tile is-child is-flex is-justify-content-center">
-								[ x{playRate} ]
-							</div>
-						</div> -->
 					</div>
 				</div>
 				<div class="tile is-parent is-1 is-flex is-justify-content-center">
@@ -403,58 +392,10 @@
 						</button>
 					</div>
 				</div>
-				<!-- <div class="tile is-child is-flex ">
-					<h2 class="subtitle pl-3 pb-3">speed</h2>
-				</div> -->
-				<!-- <div class="tile is-vertical is-2">
-					<div class="tile is-vertical">
-						<div class="tile is-parent is-flex">
-							<div class="tile is-child is-flex is-justify-content-center">Playspeed</div>
-						</div>
-
-						<div class="tile is-parent is-flex">
-							<div class="tile is-child is-flex is-justify-content-center">
-								[ x{playRate} ]
-							</div>
-						</div>
-					</div>
-
-					<div class="tile">
-						<div class="tile is-parent">
-							<div class="tile is-child is-flex is-justify-content-center">
-								<button class="button is-rounded is-large is-succcess" on:click={decreaseSpeed}>
-									<span class="icon">
-										<i class="fas fa-backward-fast" />
-									</span>
-								</button>
-							</div>
-						</div>
-						<div class="tile is-parent">
-							<div class="tile is-child is-flex is-justify-content-center">
-								<button class="button is-rounded is-large is-succcess" on:click={increaseSpeed}>
-									<span class="icon">
-										<i class="fas fa-forward-fast" />
-									</span>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div> -->
-
 				<div class="tile is-parent">
 					<div class="tile is-child" />
 				</div>
 			</div>
-
-			<!-- <div class="tile">
-				{#each Array(12) as _, index (index)}
-					<div class="tile is-parent is-1">
-						<div class="tile is-child box">
-							<p class="title has-text-black">{index}</p>
-						</div>
-					</div>
-				{/each}
-			</div> -->
 		</div>
 	</div>
 

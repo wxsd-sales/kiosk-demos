@@ -62,8 +62,7 @@
 	});
 
 	async function processChange(type: string, state: string) {
-		//if(suspend) return;
-
+		
 		const calls = await xapi.Status.SystemUnit.State.NumberOfActiveCalls.get();
 		if (calls > 0) return;
 
@@ -212,79 +211,25 @@
 	</div>
 	<!-- Hero footer: will stick at the bottom -->
 	<div class="hero-foot">
-		<!-- <nav class="navbar is-transparent">
-			<div class="navbar-start">
+		<nav class="level">
+			<!-- Left side -->
+			<div class="level-left">
 				{#if currentState == 'Countdown'}
-					<button class="navbar-item button is-normal is-outlined is-text" on:click={exitKiosk}>
+					<button class="level-item button is-normal is-outlined is-text" on:click={exitKiosk}>
 						<span class="icon is-small">
 							<i class="fas fa-circle-xmark" />
 						</span><span>Exit</span></button
 					>
 				{/if}
-				<nav class="navbar-item level is-mobile">
-					<div class="level-item has-text-centered">
-					  <div>
-						<p class="heading">Tweets</p>
-						<p class="title">3,456</p>
-					  </div>
-					</div>
-					<div class="level-item has-text-centered">
-					  <div>
-						<p class="heading">Following</p>
-						<p class="title">123</p>
-					  </div>
-					</div>
-					<div class="level-item has-text-centered">
-					  <div>
-						<p class="heading">Followers</p>
-						<p class="title">456K</p>
-					  </div>
-					</div>
-					<div class="level-item has-text-centered">
-					  <div>
-						<p class="heading">Likes</p>
-						<p class="title">789</p>
-					  </div>
-					</div>
-				  </nav>
 			</div>
 
-			
-
-			<div class="navbar-end">
-				<div class="navbar-item">
-					<div>{connectionStatus}</div>
-				</div>
-			</div>
-		</nav> -->
-
-
-
-		<nav class="level">
-			<!-- Left side -->
-			<div class="level-left">
-			  
 			{#if currentState == 'Countdown'}
-				<button class="level-item button is-normal is-outlined is-text" on:click={exitKiosk}>
-					<span class="icon is-small">
-						<i class="fas fa-circle-xmark" />
-					</span><span>Exit</span></button
-				>
+				<div class="level-item has-text-centered">Made with love - WXSD Team</div>
 			{/if}
-			</div>
-			 
-			{#if currentState == 'Countdown'}
-			<div class="level-item has-text-centered">
-				
-				  Made with love - WXSD Team
-				
-			  </div>
-			 
-			  {/if}
 			<!-- Right side -->
 			<div class="level-right">
 				<div class="level-item">{connectionStatus}</div>
 			</div>
-		  </nav>
+		</nav>
 	</div>
 </section>
