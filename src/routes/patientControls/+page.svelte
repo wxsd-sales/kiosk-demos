@@ -24,11 +24,11 @@
 			title: 'Watch TV',
 			text: 'Enter your prescription details and have your order fulfilled'
 		},
-		{
-			image: 'https://res.cloudinary.com/crakerss/image/upload/c_scale,q_auto:eco,w_1440/v1502988509/background_conifer/MS.jpg',
-			title: 'Click on image above',
-			text: 'Purus semper eget duis at tellus at urna condimentum mattis. Non blandit massa enimnec. Integer enim neque volutpat ac tincidunt vitae semper quis. Accumsan tortorposuere ac ut consequat semper viverra nam.'
-		},
+		// {
+		// 	image: 'https://res.cloudinary.com/crakerss/image/upload/c_scale,q_auto:eco,w_1440/v1502988509/background_conifer/MS.jpg',
+		// 	title: 'Click on image above',
+		// 	text: 'Purus semper eget duis at tellus at urna condimentum mattis. Non blandit massa enimnec. Integer enim neque volutpat ac tincidunt vitae semper quis. Accumsan tortorposuere ac ut consequat semper viverra nam.'
+		// },
 		{
 			image: PharmacyHelpImage,
 			title: 'Notify Staff',
