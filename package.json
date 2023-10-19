@@ -26,6 +26,7 @@
 		"@sveltejs/kit": "^1.0.0",
 		"@types/node": "^20.4.2",
 		"@types/parse-link-header": "^2.0.1",
+		"@types/qrcode": "^1.5.4",
 		"@types/validator": "^13.7.17",
 		"@types/youtube-player": "^5.5.7",
 		"bulma": "^0.9.4",

@@ -12,7 +12,7 @@
 
 	let roomAnalytics: Record<string, any> = {
 		'AmbientNoise.Level.A': 37,
-		AmbientTemperature: '71.6°F / 22C',
+		AmbientTemperature: '71.6°F / 22°C',
 		'Engagement.CloseProximity': 'False',
 		'PeopleCount.Capacity': 1,
 		'PeopleCount.Current': 1,

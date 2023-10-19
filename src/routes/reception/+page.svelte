@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import WebexLogo from '$assets/webex-logo.svg';
+	import Pumpkin from '$components/Layout/Pumpkin.svelte'
 
 	let video: string | null;
 	let spacesToken: string | null;
@@ -37,6 +38,7 @@
 		</div>
 	</section>
 {:else}
+	<!-- <Pumpkin></Pumpkin> -->
 	<iframe title="YouTube" aria-hidden="true" tabindex="-1" src="{video}?autoplay=1" hidden allow="autoplay"/>
 	<iframe
 		style=" display: block; width: 100vw; height: 100vh;  border: none"
