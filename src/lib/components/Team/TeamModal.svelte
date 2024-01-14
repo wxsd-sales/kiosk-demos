@@ -5,9 +5,7 @@
 
 	const teamInfo = 'https://wxsd-sales.github.io/kiosk-demos/teamInfo';
 
-
-	let teamInfoQRCode = QRCode.toDataURL(teamInfo, { quality: 0.9, margin: 1 });
-
+	let teamInfoQRCode = QRCode.toDataURL(teamInfo, { margin: 1 });
 </script>
 
 <Modal title="About the WXSD Team" bind:modalVisiable={showTeam}>
@@ -37,87 +35,13 @@
 						</figure>
 					{:catch error}
 						<figure class="image is-1by1">
-							<img src={image} alt="QR Code" />
+							<img src="" alt="QR Code" />
 						</figure>
 					{/await}
 				</article>
 
 				<div class="tile is-child is-1" />
 			</div>
-
-			<!-- {#await webexLabsQRCode}
-			<figure class="image is-1by1">
-				<img src="" alt="QR Code" />
-			</figure>
-		{:then image}
-			<figure class="image">
-				<img src={image} alt="QR Code" />
-			</figure>
-		{:catch error}
-			<figure class="image is-1by1">
-				<img src={image} alt="QR Code" />
-			</figure>
-		{/await} -->
-
-			<!-- <div class="columns">
-			<div class="column">
-				{#await webexLabsQRCode}
-				<div class="card">
-					<div class="card-image">
-					  <figure class="image is-1by1">
-						<img src='' alt="QR Code">
-					  </figure>
-					</div>
-					<div class="card-content">
-					  <div class="media">
-						<div class="media-content">
-						  <p class="title is-4">Webex Labs</p>
-						</div>
-					  </div>
-					</div>
-				  </div>
-				{:then image}
-					<div class="card">
-						<div class="card-image">
-							<figure class="image is-1by1">
-								<img src={image} alt="QR Code" />
-							</figure>
-						</div>
-						<div class="card-content">
-							<div class="media">
-								<div class="media-content">
-									<p class="title is-4">Webex Labs</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				{:catch error}
-					<figure class="image is-128x128" />
-				{/await}
-			</div> -->
-			<!-- <div class="column">
-				{#await githubQRCode}
-					<figure class="image is-128x128" />
-				{:then image}
-					<div class="card">
-						<div class="card-image">
-							<figure class="image is-1by1">
-								<img src={image} alt="QR Code" />
-							</figure>
-						</div>
-						<div class="card-content">
-							<div class="media">
-								<div class="media-content">
-									<p class="title is-4">GitHub Repo</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				{:catch error}
-					<figure class="image is-128x128" />
-				{/await}
-			</div> -->
-			<!-- </div> -->
 		</div></span
 	>
 </Modal>

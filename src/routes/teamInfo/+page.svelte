@@ -10,21 +10,42 @@
 	import messageImage from '$lib/assets/teamInfo/message.jpg';
 	import sourceCodeImage from '$lib/assets/teamInfo/sourceCode.jpg';
 	import webexLabsImage from '$lib/assets/teamInfo/webexLabs.jpg';
+	//import { title } from 'process';
 
 	const team = ['askmrsinh', 'akoushke', 'rajithaBK', 'tahanson-cisco', 'wmpmills', 'zoneix'];
 
+	const cards = [
+		{
+			category: 'Demos',
+			title: 'Webex Labs Demo on Collab Toolbox',
+			subTitle: 'Check out our catalog of Proof of Concept demos at Webex Labs',
+			link: 'https://collabtoolbox.cisco.com/webex-labs',
+			linkText: 'Webex Labs',
+			image: webexLabsImage,
+			imageAlt: 'Webex Labs'
+		},
+		{
+			category: 'Source Code',
+			title: 'Source Code Available On GitHub',
+			subTitle: 'All our projects are open source and available on GitHub 👍',
+			link: 'https://github.com/wxsd-sales',
+			linkText: 'GitHub Repo',
+			image: sourceCodeImage,
+			imageAlt: 'asd'
+		},
+		{
+			category: 'Engage',
+			title: 'Engage With Our Team',
+			subTitle: 'Got a customer engagement and want to show them the art of the possible? Message our engagement Bot',
+			link: 'https://collabtoolbox.cisco.com/webex-labs',
+			linkText: 'Message Our Bot 🤖',
+			image: messageImage,
+			imageAlt: 'asd'
+		}
+	];
+
 	onMount(() => {});
 </script>
-
-<!-- <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ghost Style Blog - Free Bulma template</title>
-    <script src="https://kit.fontawesome.com/15181efa86.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.4/css/bulma.min.css" />
-    <link rel="stylesheet" type="text/css" href="../css/ghost-blog.css">
-  </head> -->
 
 <section class="hero is-fullheight">
 	<div class="hero-head pt-5 pb-5">
@@ -36,12 +57,12 @@
 
 	<div class="hero-body">
 		<div class="container">
-			<div class="container is-widescreen">
-				<div class="tile is-ancestor">
-					<div class="tile is-parent">
-						<div class="title" />
-						{#each team as member}
-							<div class="title is-1">
+			<section class="section is-flex is-flex-direction-column is-align-items-center">
+				<div class="title has-text-white">Meet The Team</div>
+
+				<div class="columns is-mobile">
+					{#each team as member}
+							<div class="colume">
 								<figure class="image blog-img is-64x64">
 									<img
 										class="is-rounded"
@@ -51,77 +72,29 @@
 								</figure>
 							</div>
 						{/each}
-						<div class="title" />
-					</div>
-				</div>
-			</div>
+				  </div>
+			
+			</section>
 
-		
 			<div class="columns">
 				<div class="columns is-multiline">
-					<div class="column post is-4">
-						<article class="columns is-multiline">
-							<div class="column is-12">
-								<figure class="image blog-img is-16by9">
-									<img class="blog-img" src={webexLabsImage} alt="WebexLabs" />
-								</figure>
-							</div>
-							<div class="column is-12 featured-content">
-								<h3 class="has-text-info">Demos</h3>
-								<h1 class="title pt-2 has-text-white">Webex Labs Demos on Collab Toolbox</h1>
-								<h2 class="subtitle pt-2 has-text-grey-lighter">
-									Check out our catalog of Proof of Concept demos at Webex Labs
-								</h2>
-								<a
-									href="https://collabtoolbox.cisco.com/webex-labs"
-									class="button is-primary has-text-grey-darker">Webex Labs</a
-								>
-							</div>
-						</article>
-					</div>
-					<div class="column post is-4">
-						<article class="columns is-multiline">
-							<div class="column is-12">
-								<figure class="image blog-img is-16by9">
-									<img class="blog-img" src={sourceCodeImage} alt="SourceCode" />
-								</figure>
-							</div>
-							<div class="column is-12 featured-content">
-								<h3 class="has-text-info">Source Code</h3>
-								<h1 class="title pt-2 has-text-white">Source Code Available On GitHub</h1>
-								<h2 class="subtitle pt-2 has-text-grey-lighter">
-									All our projects are open source and available on GitHub 👍
-								</h2>
-
-								<a
-									href="https://github.com/wxsd-sales"
-									class="button is-primary has-text-grey-darker">GitHub Repo</a
-								>
-							</div>
-						</article>
-					</div>
-					<div class="column post is-4">
-						<article class="columns is-multiline">
-							<div class="column is-12">
-								<figure class="image blog-img is-16by9">
-									<img class="blog-img" src={messageImage} alt="Message" />
-								</figure>
-							</div>
-							<div class="column is-12 featured-content">
-								<h3 class="has-text-info">Engage</h3>
-								<h1 class="title pt-2 has-text-white">Engage With Our Team</h1>
-								<h2 class="subtitle pt-2 has-text-grey-lighter">
-									Got a customer engagement and want to show them the art of the possible? Message
-									our engagement Bot
-								</h2>
-
-								<a
-									href="webexteams://im?email=globalexpert@webex.bot"
-									class="button is-primary has-text-grey-darker">Message Bot 🤖</a
-								>
-							</div>
-						</article>
-					</div>
+					{#each cards as { image, category, title, subTitle, link, linkText }}
+						<div class="column post is-4">
+							<article class="columns is-multiline">
+								<div class="column is-12">
+									<figure class="image blog-img is-16by9">
+										<img class="blog-img" src={image} alt="WebexLabs" />
+									</figure>
+								</div>
+								<div class="column is-12 featured-content">
+									<h3 class="has-text-info">{category}</h3>
+									<h1 class="title pt-2 has-text-white">{title}</h1>
+									<h2 class="subtitle pt-2 has-text-grey-lighter">{subTitle}</h2>
+									<a href="{link}" class="button is-primary has-text-grey-darker">{linkText}</a>
+								</div>
+							</article>
+						</div>
+					{/each}
 				</div>
 			</div>
 		</div>
