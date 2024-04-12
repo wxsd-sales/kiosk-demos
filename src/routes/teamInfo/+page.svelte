@@ -10,7 +10,7 @@
 	import messageImage from '$lib/assets/teamInfo/message.jpg';
 	import sourceCodeImage from '$lib/assets/teamInfo/sourceCode.jpg';
 	import webexLabsImage from '$lib/assets/teamInfo/webexLabs.jpg';
-	//import { title } from 'process';
+
 
 	const team = ['askmrsinh', 'akoushke', 'rajithaBK', 'tahanson-cisco', 'wmpmills', 'zoneix'];
 
