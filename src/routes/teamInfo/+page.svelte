@@ -12,7 +12,7 @@
 	import webexLabsImage from '$lib/assets/teamInfo/webexLabs.jpg';
 
 
-	const team = ['askmrsinh', 'akoushke', 'rajithaBK', 'tahanson-cisco', 'wmpmills', 'zoneix'];
+	const team = ['wazquez', 'akoushke', 'rajithaBK', 'tahanson-cisco', 'wmpmills', 'zoneix'];
 
 	const cards = [
 		{
