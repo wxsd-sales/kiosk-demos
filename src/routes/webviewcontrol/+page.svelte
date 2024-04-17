@@ -19,6 +19,8 @@
 	let dialInput = '';
 	let extension = '2222';
 
+	const loadingTimer = 2000;
+
 	onMount(() => {
 		const sip = $page.url.searchParams.get('sipAddress');
 		const num = $page.url.searchParams.get('extension');
@@ -33,24 +35,34 @@
 	function dial(number: string) {
 		console.log('Dialling Number', number);
 		toast.success('Dialling ' + number);
-		location.hash = '';
-		location.hash = '#command=dial&number=' + number;
+		history.replaceState(null, '', ' ');
+		setTimeout(() => {
+			window.location.hash = '#command=dial&number=' + number;
+		}, 500);
+		setTimeout(() => {
+			history.replaceState(null, '', ' ');
+		}, loadingTimer);
 	}
 
 	function dialSIP() {
 		console.log('Dialling SIP', dialInput);
 		toast.success('Dialling ' + dialInput);
-		location.hash = '';
-		location.hash = '#command=dial&number=' + dialInput;
+		history.replaceState(null, '', ' ');
+		setTimeout(() => {
+			window.location.hash = '#command=dial&number=' + dialInput;
+		}, 500);
+		setTimeout(() => {
+			history.replaceState(null, '', ' ');
+		}, loadingTimer);
 	}
 
 	function exitKiosk() {
 		console.log('Existing Kiosk Mode');
-		const loadingId = toast.loading('PIN sent to device')
+		const loadingId = toast.loading('PIN sent to device');
 
-		setTimeout(()=>{
+		setTimeout(() => {
 			toast.remove(loadingId);
-		}, 3000)
+		}, 3000);
 		location.hash = '';
 		location.hash = '#command=exitKiosk&pin=' + pin;
 	}
@@ -68,7 +80,6 @@
 	function pinAccepted() {
 		console.log('PIN Accepted');
 		toast.success('PIN Accepted');
-
 	}
 
 	function pinRejected() {
@@ -81,7 +92,7 @@
 		if (!location.hash.startsWith('#response=')) return;
 
 		const response = location.hash.replace('#response=', '');
-		console.log('Hash Response: ' + response)
+		console.log('Hash Response: ' + response);
 
 		switch (response) {
 			case 'accepted':
@@ -102,7 +113,7 @@
 	<!-- Hero head: will stick at the top -->
 	<div class="hero-head">
 		{#if mainView}
-			<div class="container has-text-centered ">
+			<div class="container has-text-centered">
 				<h1 class="title is-1 pt-3">WXSD - WebView Device Control</h1>
 			</div>
 		{/if}
@@ -112,7 +123,7 @@
 		{#if standby}
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<div
-				class="container has-text-centered "
+				class="container has-text-centered"
 				on:click={() => (standby = false)}
 				transition:fly={{ y: -200, duration: 1000 }}
 				on:outroend={() => (mainView = true)}
@@ -201,7 +212,11 @@
 				</header>
 				<section class="modal-card-body has-text-centered has-background-light">
 					<h1 class="title {pin ? 'has-text-grey' : 'has-text-grey-lighter'}">{view}</h1>
-					<Keypad bind:value={pin} on:submit={exitKiosk} on:timeout={()=>toast.error('No response from device')}/>
+					<Keypad
+						bind:value={pin}
+						on:submit={exitKiosk}
+						on:timeout={() => toast.error('No response from device')}
+					/>
 				</section>
 			</div>
 		</div>
